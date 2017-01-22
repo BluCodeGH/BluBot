@@ -30,6 +30,7 @@ USAGE:
     """Quit the bot
 USAGE:
   quit"""
+    await self.client.send_message(m.channel, "Logging out and quitting.")
     await self.client.logout()
 
   @commands.ownerCommand()
@@ -38,6 +39,7 @@ USAGE:
 USAGE:
   quit"""
     self.isRestart = True
+    await self.client.send_message(m.channel, "Restarting.")
     await self.client.logout()
 
   @commands.adminCommand("pull")

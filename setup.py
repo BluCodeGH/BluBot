@@ -7,7 +7,6 @@ twofa = None
 token = None
 email = None
 pwrd = None
-selfbot = None
 
 print("Welcome to the setup for BluBot.\nI first need some information in order to run.")
 while userbot not in valid:
@@ -20,25 +19,25 @@ if userbot in yes:
   else:
     email = str(input("What is the email address associated with your account? "))
     pwrd = str(input("What is your discord password? "))
-  while selfbot not in valid:
-    selfbot = str(input("Should people other that you be able to use the bot? [Y,N] "))
 else:
   token = str(input("What is the token of the bot account? "))
 prefix = str(input("What should the command prefix for the bot be? "))
 uid = str(input("What is your discord id? "))
 
-if selfbot in yes:
-  selfbot = "u"
-else:
-  selfbot = "s"
+if userbot in yes:
+  btype = "u"
+else
+  btype = "b"
 
 if token is None:
   with open(pjoin("data", "botData.json"), "w+") as out:
-    out.write('["' + email + '", "' + pwrd + '", "' + selfbot + '", "' + prefix + '"]')
+    out.write('["' + email + '", "' + pwrd + '", "u", "' + prefix + '"]')
 else:
   with open(pjoin("data", "botData.json"), "w+") as out:
-    out.write('["' + token + '", "u", "' + prefix + '"]')
+    out.write('["' + token + '", "' + btype + '", "' + prefix + '"]')
 with open(pjoin("data", "perms.json"), "w+") as out:
   out.write('{"owner":["' + uid + '"], "admin":[]}')
+with open(pjoin("data", "quotes.json"), "w+") as out:
+  out.write('[]')
 
 print("Setup finished successfully.")

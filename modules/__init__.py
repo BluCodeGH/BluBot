@@ -1,7 +1,7 @@
 import importlib
 from .internal import commands
 
-__all__ = ["system"]
+__all__ = ["system", "admin", "info"]
 modules = {}
 
 for m in __all__:

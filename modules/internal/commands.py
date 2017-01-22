@@ -53,6 +53,8 @@ def adminCommand(alts=None, optional=False):
     obj = inspect.getfile(func).split(os.sep)[-1].split(".")[0]
     if objects.get(obj, -1) == -1:
       objects[obj] = None
+    if commandHelpClass.get(obj, None) is None:
+      commandHelpClass[obj] = {}
     async def wrapper(m, args, args2="UNUSED"):
       selfCalled = False
       if args2 != "UNUSED":
@@ -91,6 +93,8 @@ def ownerCommand(alts=None, optional=False):
     obj = inspect.getfile(func).split(os.sep)[-1].split(".")[0]
     if objects.get(obj, -1) == -1:
       objects[obj] = None
+    if commandHelpClass.get(obj, None) is None:
+      commandHelpClass[obj] = {}
     async def wrapper(m, args, args2="UNUSED"):
       selfCalled = False
       if args2 != "UNUSED":

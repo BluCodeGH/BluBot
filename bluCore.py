@@ -23,7 +23,7 @@ async def on_ready():
 @client.event
 async def on_message(m):
   if m.content.startswith(system.startChars) and not m.author.bot and m.content.strip(system.startChars) != "":
-    if data[-2] == "s" and m.author.id != client.user.id:
+    if data[-2] == "u" and m.author.id != client.user.id:
       return
     if cooldown.get(m.author.id, None) is not None:
       if (datetime.datetime.now() - cooldown[m.author.id]).total_seconds() < 3:
