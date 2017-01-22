@@ -22,10 +22,7 @@ def run(count):
   try:
     try:
       print("Logging in.")
-      if len(data) == 4:
-        loop.run_until_complete(client.start(data[0], data[1]))
-      else:
-        loop.run_until_complete(client.start(data[0]))
+      loop.run_until_complete(client.start(*data[:-1]))
       print("done")
     except RuntimeError:
       pass
