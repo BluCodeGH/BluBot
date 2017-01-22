@@ -17,10 +17,9 @@ initial = sys.modules.copy().keys() #get initial list of modules not to remove
 
 import bluCore
 
-count = 0
 while True:
   print("Running bot.")
-  isRestart = bluCore.run(count) #run the bot
+  isRestart = bluCore.run() #run the bot
   print("Bot finished with restart status " + str(isRestart) + ".")
   if isRestart:
     loop_old = asyncio.get_event_loop() #discard the old event loop
@@ -33,8 +32,5 @@ while True:
     import bluCore
 
   else:
-    print("Exiting")
+    print("Exiting.")
     sys.exit(0)
-
-  count += 1
-  time.sleep(1)
