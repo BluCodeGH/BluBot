@@ -8,8 +8,7 @@ from .internal import util
 from .internal import perms
 
 class main():
-  """Info
-  Commands that give info about things."""
+  """Commands that give info about things."""
   def __init__(self, client):
     self.client = client
 

@@ -4,8 +4,7 @@ from .internal import perms
 from .internal import util
 
 class main():
-  """Admin
-  Commands dealing with admin management."""
+  """Commands dealing with admin management."""
   def __init__(self, client):
     self.client = client
 

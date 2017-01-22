@@ -1,6 +1,8 @@
 import asyncio
 from os.path import join as pjoin
 import json
+import sys
+import traceback
 import datetime
 import discord
 import modules
@@ -38,8 +40,13 @@ async def on_message(m):
       try:
         await commands.commands[comm](m, args)
       except Exception as e:
-        res = "An internal error occurred. Contact <@!207648732336881664> for help.\n"
-        res += "```" + str(type(e).__name__) + ": " + str(e) + ".```"
+        res = "An internal error occurred. Contact <@!207648732336881664> for help.\n```python\n"
+        exc_type, exc_value, exc_traceback = sys.exc_info()
+        for i, line in enumerate(traceback.format_exception(exc_type, exc_value, exc_traceback)):
+          if i > 0 and i < len(traceback.format_exception(exc_type, exc_value, exc_traceback)) - 1 and not line.split(os.sep)[-1].startswith("  File"):
+            res += '  File "'
+          res += line.split(os.sep)[-1]
+        res += "```"
         await client.send_message(m.channel, res)
         if args is None:
           args = ""

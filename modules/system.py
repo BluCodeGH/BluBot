@@ -6,9 +6,7 @@ import asyncio
 from .internal import commands
 
 class main:
-  """System
-  General bot maintenance."""
-
+  """General bot maintenance."""
   def __init__(self, client):
     self.client = client
     with open(os.path.join("data","botData.json"),"r") as infile:

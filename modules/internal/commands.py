@@ -25,7 +25,7 @@ def command(alts=None, optional=False):
         m = args
         args = args2
       if inspect.getsourcelines(func)[0][1][-4] != "_" and args is None and not optional:
-        res = 'Err: Missing required argument. Usage:\n```' + func.__doc__.split("\n", 2)[-1] +  + "```"
+        res = 'Err: Missing required argument. Usage:\n```' + func.__doc__.split("\n", 2)[-1] + "```"
         await objects[obj].client.send_message(m.channel, res)
       else:
         await func(objects[obj], m, args)
