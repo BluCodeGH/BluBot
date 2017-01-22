@@ -13,7 +13,7 @@ if os.name == 'posix': #use uvloop if possible
 else:
   print("Uvloop is not supported on this system. Reverting to asyncio.")
 
-initial = sys.modules.keys() #get initial list of modules not to remove
+initial = sys.modules.copy().keys() #get initial list of modules not to remove
 
 import bluCore
 

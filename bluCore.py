@@ -2,6 +2,7 @@ import asyncio
 from os.path import join as pjoin
 import json
 import discord
+import test
 
 client = discord.Client()
 with open(pjoin("data","botData.json"),"r") as infile:
@@ -13,7 +14,8 @@ async def on_ready():
 
 @client.event
 async def on_message(m):
-  print(m.content)
+  if m.content == ".test":
+    await test.tester(client, m)
   if m.content == ".q":
     await client.logout()
 
