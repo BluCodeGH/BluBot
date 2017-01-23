@@ -39,9 +39,9 @@ async def on_message(m):
     else:
       comm = m.content[len(system.startChars):]
       args = None
-    if comm in commands.commands.keys():
+    if comm.lower() in commands.commands.keys():
       try:
-        await commands.commands[comm](m, args)
+        await commands.commands[comm.lower()](m, args)
       except Exception as e:
         res = "An internal error occurred. Contact <@!207648732336881664> for help.\n```python\n"
         exc_type, exc_value, exc_traceback = sys.exc_info()

@@ -29,17 +29,17 @@ def command(alts=None, optional=False):
         await objects[obj].client.send_message(m.channel, res)
       else:
         await func(objects[obj], m, args)
-    commands[func.__name__] = wrapper
-    commandHelp[func.__name__] = func.__doc__.split("\n", 1)
-    commandHelpClass[obj][func.__name__] = func.__doc__.split("\n", 1)
+    commands[func.__name__.lower()] = wrapper
+    commandHelp[func.__name__.lower()] = func.__doc__.split("\n", 1)
+    commandHelpClass[obj][func.__name__.lower()] = func.__doc__.split("\n", 1)
     for alt in alts:
-      commands[alt] = wrapper
+      commands[alt.lower()] = wrapper
       hlp = func.__doc__.split("\n", 3)
       if len(hlp) == 3:
         hlp.append("")
-      hlp = [hlp[0], hlp[1] + "\n" + hlp[2].replace(func.__name__, alt) + "\n" + hlp[3]]
-      commandHelp[alt] = hlp
-      commandHelpClass[obj][alt] = hlp + [None]
+      hlp = [hlp[0], hlp[1] + "\n" + hlp[2].replace(func.__name__.lower(), alt) + "\n" + hlp[3]]
+      commandHelp[alt.lower()] = hlp
+      commandHelpClass[obj][alt.lower()] = hlp + [None]
     return func
   return real_command
 
@@ -69,17 +69,17 @@ def adminCommand(alts=None, optional=False):
           await func(objects[obj], m, args)
       else:
         await objects[obj].client.send_message(m.channel, 'Err: Admin only command.')
-    commands[func.__name__] = wrapper
-    commandHelp[func.__name__] = func.__doc__.split("\n", 1)
-    commandHelpClass[obj][func.__name__] = func.__doc__.split("\n", 1)
+    commands[func.__name__.lower()] = wrapper
+    commandHelp[func.__name__.lower()] = func.__doc__.split("\n", 1)
+    commandHelpClass[obj][func.__name__.lower()] = func.__doc__.split("\n", 1)
     for alt in alts:
-      commands[alt] = wrapper
+      commands[alt.lower()] = wrapper
       hlp = func.__doc__.split("\n", 3)
       if len(hlp) == 3:
         hlp.append("")
-      hlp = [hlp[0], hlp[1] + "\n" + hlp[2].replace(func.__name__, alt) + "\n" + hlp[3]]
-      commandHelp[alt] = hlp
-      commandHelpClass[obj][alt] = hlp + [None]
+      hlp = [hlp[0], hlp[1] + "\n" + hlp[2].replace(func.__name__.lower(), alt) + "\n" + hlp[3]]
+      commandHelp[alt.lower()] = hlp
+      commandHelpClass[obj][alt.lower()] = hlp + [None]
     return func
   return real_adminCommand
 
@@ -109,16 +109,16 @@ def ownerCommand(alts=None, optional=False):
           await func(objects[obj], m, args)
       else:
         await objects[obj].client.send_message(m.channel, 'Err: Owner only command.')
-    commands[func.__name__] = wrapper
-    commandHelp[func.__name__] = func.__doc__.split("\n", 1)
-    commandHelpClass[obj][func.__name__] = func.__doc__.split("\n", 1)
+    commands[func.__name__.lower()] = wrapper
+    commandHelp[func.__name__.lower()] = func.__doc__.split("\n", 1)
+    commandHelpClass[obj][func.__name__.lower()] = func.__doc__.split("\n", 1)
     for alt in alts:
-      commands[alt] = wrapper
+      commands[alt.lower()] = wrapper
       hlp = func.__doc__.split("\n", 3)
       if len(hlp) == 3:
         hlp.append("")
-      hlp = [hlp[0], hlp[1] + "\n" + hlp[2].replace(func.__name__, alt) + "\n" + hlp[3]]
-      commandHelp[alt] = hlp
-      commandHelpClass[obj][alt] = hlp + [None]
+      hlp = [hlp[0], hlp[1] + "\n" + hlp[2].replace(func.__name__.lower(), alt) + "\n" + hlp[3]]
+      commandHelp[alt.lower()] = hlp
+      commandHelpClass[obj][alt.lower()] = hlp + [None]
     return func
   return real_ownerCommand
