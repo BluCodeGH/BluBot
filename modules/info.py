@@ -1,5 +1,9 @@
 import asyncio
 import random
+import sys
+import os
+from os.path import join as pjoin
+import subprocess
 from yahoo_finance import Share, Currency
 from google import search
 import discord
@@ -95,6 +99,15 @@ ARGUMENTS:
           res += "Err: Invalid currency code " + code + ".\n"
     await self.client.send_message(m.channel, res)
 
+  @commands.command()
+  async def screenshot(self, m, _):
+    """Takes a screenshot
+USAGE:
+  screenshot"""
+    subprocess.run([sys.executable, pjoin("modules", "internal", "screenshot.py")], shell=True)
+    await self.client.send_file(m.channel, "screenshot.png", content="My screen probably looks like this.")
+    os.remove("screenshot.png")
+
   @commands.command("userData", True)
   async def user(self, m, args):
     """Get data about a user.
@@ -139,7 +152,10 @@ ARGUMENTS:
           raise AttributeError
       except AttributeError:
         e.add_field(name='Nickname:', value="No nickname set.")
-      e.add_field(name='Current Status:', value=str(usr.status).capitalize())
+      try:
+        e.add_field(name='Current Status:', value=str(usr.status).capitalize())
+      except AttributeError:
+        e.add_field(name='Current Status:', value="WTF is up with users in dms.")
       e.add_field(name='Playing:', value=usr.game)
       e.add_field(name='Joined Server:', value=usr.joined_at.strftime('%m-%d-%Y'))
       e.add_field(name='User Roles:', value=', '.join([i.name.replace('@', '') for i in usr.roles]))
