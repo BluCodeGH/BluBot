@@ -132,10 +132,13 @@ ARGUMENTS:
         continue
       e = discord.Embed(colour=int('0x%06X' % random.randint(0, 256**3-1), 16))
       e.add_field(name='Username:', value=usr.name)
-      if usr.nick is None:
+      try:
+        if usr.nick is not None:
+          e.add_field(name='Nickname:', value=usr.nick)
+        else:
+          raise AttributeError
+      except AttributeError:
         e.add_field(name='Nickname:', value="No nickname set.")
-      else:
-        e.add_field(name='Nickname:', value=usr.nick)
       e.add_field(name='Current Status:', value=str(usr.status).capitalize())
       e.add_field(name='Playing:', value=usr.game)
       e.add_field(name='Joined Server:', value=usr.joined_at.strftime('%m-%d-%Y'))
