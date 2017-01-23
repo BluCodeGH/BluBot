@@ -1,18 +1,20 @@
 import importlib
 from .internal import commands
 
-__all__ = ["system", "admin", "info", "quotes", "games"]
+__all__ = ["system", "admin", "info", "quotes", "games", "cosmetic"]
 modules = {}
 
 for m in __all__:
   modules[m] = importlib.import_module("modules." + m)
 
-def init(client):
-  sysObj = None
+def init(client, selfBot):
+  if selfBot:
+    __all__.append("selfbot")
+    modules["selfbot"] = importlib.import_module("modules.selfbot")
+  objects = {}
   for m in __all__:
     modules[m] = importlib.reload(modules[m])
     obj = modules[m].main(client)
+    objects[m] = obj
     commands.objects[m] = obj
-    if m == "system":
-      sysObj = obj
-  return sysObj
+  return objects

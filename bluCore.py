@@ -9,15 +9,17 @@ import discord
 import modules
 from modules.internal import commands
 
+with open(pjoin("data","botData.json"),"r") as infile:
+  data = json.loads(infile.read())
+selfBot = data[-2] == "s"
+
 client = discord.Client()
 print("Loading modules.")
-system = modules.init(client)
+objects = modules.init(client, selfBot)
+system = objects["system"]
 print("Modules loaded.")
 
 cooldown = {}
-
-with open(pjoin("data","botData.json"),"r") as infile:
-  data = json.loads(infile.read())
 
 @client.event
 async def on_ready():
@@ -26,7 +28,7 @@ async def on_ready():
 @client.event
 async def on_message(m):
   if m.content.startswith(system.startChars) and not m.author.bot and m.content.strip(system.startChars) != "":
-    if data[-2] == "u" and m.author.id != client.user.id:
+    if selfBot and m.author.id != client.user.id:
       return
     if cooldown.get(m.author.id, None) is not None:
       if (datetime.datetime.now() - cooldown[m.author.id]).total_seconds() < 3:
@@ -53,6 +55,9 @@ async def on_message(m):
           args = ""
   elif m.content == "The current latency is" and m.author == client.user:
     await commands.commands["latency"](m, "placeholder")
+  if selfBot:
+    await objects["selfbot"].substitute(m, None)
+  await objects["cosmetic"].filter(m, None)
 
 def run():
   loop = asyncio.get_event_loop()

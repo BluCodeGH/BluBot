@@ -1,9 +1,6 @@
 import asyncio
 import random
-import sys
-import os
 from os.path import join as pjoin
-import subprocess
 from yahoo_finance import Share, Currency
 from google import search
 import discord
@@ -98,15 +95,6 @@ ARGUMENTS:
         except:
           res += "Err: Invalid currency code " + code + ".\n"
     await self.client.send_message(m.channel, res)
-
-  @commands.command()
-  async def screenshot(self, m, _):
-    """Takes a screenshot
-USAGE:
-  screenshot"""
-    subprocess.run([sys.executable, pjoin("modules", "internal", "screenshot.py")], shell=True)
-    await self.client.send_file(m.channel, "screenshot.png", content="My screen probably looks like this.")
-    os.remove("screenshot.png")
 
   @commands.command("userData", True)
   async def user(self, m, args):
