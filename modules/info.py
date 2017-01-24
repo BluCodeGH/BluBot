@@ -111,7 +111,7 @@ ARGUMENTS:
     if args is None:
       usernames = [m.author]
     else:
-      usernames = util.getUsers(args, self.client)
+      usernames = await util.getUsers(args, self.client)
     for usr in usernames:
       if isinstance(usr, str):
         await self.client.send_message(m.channel, "Invalid username " + usr + ".")

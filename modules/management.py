@@ -29,7 +29,7 @@ class main:
           await self.client.send_message(m.channel, m.author.mention + " Your message has been removed due to the filtering rules the owner of this bot has set in place.")
           return
 
-  @commands.command("addFilter")
+  @commands.adminCommand("addFilter")
   async def newFilter(self, m, args):
     """Add a new filter.
 USAGE:
@@ -42,7 +42,7 @@ ARGUMENTS:
       with open(pjoin("data", "filters.json"), "w+") as out:
         out.write(json.dumps((self.filters, self.filtersOn)))
     try:
-      perms = m.channel.permissions_for(m.server.get_member(self.client.user.id))
+      perms = m.channel.permissions_for(m.server.get_member(m.author.id))
     except AttributeError:
       return
     if perms.administrator or perms.manage_messages:
@@ -51,9 +51,9 @@ ARGUMENTS:
         out.write(json.dumps((self.filters, self.filtersOn)))
       await self.client.send_message(m.channel, "Successfully added filter.")
     else:
-      await self.client.send_message(m.channel, "Insufficient permissions to add filters to this channel.")
+      await self.client.send_message(m.channel, "Insufficient permissions to add filters to this channel. You need **manage messages** or **administrator**.")
 
-  @commands.command("remFilter")
+  @commands.adminCommand("remFilter")
   async def delFilter(self, m, args):
     """Remove a filter.
 USAGE:
@@ -67,14 +67,21 @@ ARGUMENTS:
         out.write(json.dumps((self.filters, self.filtersOn)))
       return
     try:
-      self.filters[m.channel.id].remove(args.strip())
-      with open(pjoin("data", "filters.json"), "w+") as out:
-        out.write(json.dumps((self.filters, self.filtersOn)))
-      await self.client.send_message(m.channel, "Successfully removed filter.")
-    except ValueError:
-      await self.client.send_message(m.channel, "That filter does not exist")
+      perms = m.channel.permissions_for(m.server.get_member(m.author.id))
+    except AttributeError:
+      return
+    if perms.administrator or perms.manage_messages:
+      try:
+        self.filters[m.channel.id].remove(args.strip())
+        with open(pjoin("data", "filters.json"), "w+") as out:
+          out.write(json.dumps((self.filters, self.filtersOn)))
+        await self.client.send_message(m.channel, "Successfully removed filter.")
+      except ValueError:
+        await self.client.send_message(m.channel, "That filter does not exist")
+    else:
+      await self.client.send_message(m.channel, "Insufficient permissions to remove filters from this channel. You need **manage messages** or **administrator**.")
 
-  @commands.command()
+  @commands.adminCommand()
   async def toggleFilter(self, m, _):
     """Toggle the filter
 USAGE:
@@ -83,15 +90,22 @@ USAGE:
       self.filters[m.channel.id] = []
       with open(pjoin("data", "filters.json"), "w+") as out:
         out.write(json.dumps((self.filters, self.filtersOn)))
-    self.filtersOn = not self.filtersOn
-    with open(pjoin("data", "filters.json"), "w+") as out:
-      out.write(json.dumps((self.filters, self.filtersOn)))
-    if self.filtersOn:
-      await self.client.send_message(m.channel, "Successfully enabled filters.")
+    try:
+      perms = m.channel.permissions_for(m.server.get_member(m.author.id))
+    except AttributeError:
+      return
+    if perms.administrator or perms.manage_messages:
+      self.filtersOn = not self.filtersOn
+      with open(pjoin("data", "filters.json"), "w+") as out:
+        out.write(json.dumps((self.filters, self.filtersOn)))
+      if self.filtersOn:
+        await self.client.send_message(m.channel, "Successfully enabled filters.")
+      else:
+        await self.client.send_message(m.channel, "Successfully disabled filters.")
     else:
-      await self.client.send_message(m.channel, "Successfully disabled filters.")
+      await self.client.send_message(m.channel, "Insufficient permissions to toggle filters on this channel. You need **manage messages** or **administrator**.")
 
-  @commands.command()
+  @commands.adminCommand()
   async def kick(self, m, args):
     """Kick someone(s)
 USAGE:
@@ -104,7 +118,7 @@ ARGUMENTS:
 
   mention: a mention of the person to kick."""
     try:
-      perms = m.channel.permissions_for(m.server.get_member(self.client.user.id))
+      perms = m.channel.permissions_for(m.server.get_member(m.author.id))
     except AttributeError:
       return
     if perms.administrator or perms.kick_members:
@@ -117,8 +131,38 @@ ARGUMENTS:
           else:
             await self.client.send_message(m.channel, "Err: User " + res.name + " is not in this server.")
           continue
-        #self.client.kick(usr)
-        print("Kick " + usr.display_name + " from " + usr.server.name)
+        self.client.kick(usr)
         await self.client.send_message(m.channel, "Kicked " + usr.display_name + ".")
     else:
-      await self.client.send_message(m.channel, "You do not have enough permission to kick users.")
+      await self.client.send_message(m.channel, "You do not have enough permission to kick users. You need **kick members** or **administrator**.")
+
+  @commands.adminCommand()
+  async def ban(self, m, args):
+    """Ban someone(s)
+USAGE:
+  ban [name|id|mention] ...
+
+ARGUMENTS:
+  name:  The name of the person to kick.
+
+  id: the id of the person to kick.
+
+  mention: a mention of the person to kick."""
+    try:
+      perms = m.channel.permissions_for(m.server.get_member(m.author.id))
+    except AttributeError:
+      return
+    if perms.administrator or perms.ban_members:
+      usernames = await util.getUsers(args, self.client, m.server)
+      for usr in usernames:
+        if isinstance(usr, str):
+          res = await util.getUser(usr, self.client)
+          if res is None:
+            await self.client.send_message(m.channel, "Err: Invalid username " + usr + ".")
+          else:
+            await self.client.send_message(m.channel, "Err: User " + res.name + " is not in this server.")
+          continue
+        self.client.ban(usr)
+        await self.client.send_message(m.channel, "Banned " + usr.display_name + ".")
+    else:
+      await self.client.send_message(m.channel, "You do not have enough permission to ban users. You need **ban members** or **administrator**.")
