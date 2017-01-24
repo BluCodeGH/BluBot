@@ -18,7 +18,7 @@ class main:
 USAGE:
   screenshot"""
     subprocess.run([sys.executable, os.path.join("modules", "internal", "screenshot.py")], shell=True)
-    await self.client.send_file(m.channel, "screenshot.png", content="My screen probably looks like this.")
+    await self.client.send_file(m.channel, "screenshot.png", content="My screen:")
     os.remove("screenshot.png")
 
   async def substitute(self, m, _):

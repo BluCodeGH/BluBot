@@ -111,22 +111,7 @@ ARGUMENTS:
     if args is None:
       usernames = [m.author]
     else:
-      inputs = args.split()
-      usernames = []
-      i = 0
-      inprog = ""
-      while i < len(inputs):
-        inprog += inputs[i].strip("<>@!") + " "
-        res = await util.getUser(inprog, self.client)
-        if res is not None:
-          usernames.append(res)
-          inprog = ""
-        elif i + 1 == len(inputs):
-          usernames.append(inputs[0])
-          i = -1
-          inputs = inputs[1:]
-          inprog = ""
-        i += 1
+      usernames = util.getUsers(args, self.client)
     for usr in usernames:
       if isinstance(usr, str):
         await self.client.send_message(m.channel, "Invalid username " + usr + ".")

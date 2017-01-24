@@ -57,7 +57,7 @@ async def on_message(m):
     await commands.commands["latency"](m, "placeholder")
   if selfBot:
     await objects["selfbot"].substitute(m, None)
-  await objects["cosmetic"].filter(m, None)
+  await objects["management"].filter(m, None)
 
 def run():
   loop = asyncio.get_event_loop()
