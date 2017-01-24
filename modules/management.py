@@ -108,18 +108,17 @@ ARGUMENTS:
     except AttributeError:
       return
     if perms.administrator or perms.kick_members:
-      usernames = await util.getUsers(args, self.client)
-      print(usernames)
+      usernames = await util.getUsers(args, self.client, m.server)
       for usr in usernames:
         if isinstance(usr, str):
-          await self.client.send_message(m.channel, "Err: Invalid username " + usr + ".")
+          res = await util.getUser(usr, self.client)
+          if res is None:
+            await self.client.send_message(m.channel, "Err: Invalid username " + usr + ".")
+          else:
+            await self.client.send_message(m.channel, "Err: User " + res.name + " is not in this server.")
           continue
-        res = m.server.get_member(usr.id)
-        if res is None:
-          self.client.send_message(m.channel, "Err: User " + usr.name + " is not in this server.")
-          continue
-        #self.client.kick(res)
-        print("Kick " + res.display_name + " from " + res.server.name)
-        self.client.send_message(m.channel, "Kicked " + res.display_name + ".")
+        #self.client.kick(usr)
+        print("Kick " + usr.display_name + " from " + usr.server.name)
+        await self.client.send_message(m.channel, "Kicked " + usr.display_name + ".")
     else:
-      self.client.send_message(m.channel, "You do not have enough permission to kick users.")
+      await self.client.send_message(m.channel, "You do not have enough permission to kick users.")
