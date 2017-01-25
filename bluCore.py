@@ -24,6 +24,8 @@ cooldown = {}
 @client.event
 async def on_ready():
   print('Logged in as ' + client.user.display_name + '.')
+  objects["repl"].coreGlobals = globals()
+  objects["repl"].coreLocals = locals()
 
 @client.event
 async def on_message(m):

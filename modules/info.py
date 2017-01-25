@@ -109,7 +109,7 @@ ARGUMENTS:
 
   mention:  A mention of a user. Will ask interactively if not specified."""
     if args is None:
-      usernames = [m.author]
+      usernames = [await util.getUser(m.author.id, self.client)]
     else:
       usernames = await util.getUsers(args, self.client)
     for usr in usernames:
@@ -118,17 +118,11 @@ ARGUMENTS:
         continue
       e = discord.Embed(colour=int('0x%06X' % random.randint(0, 256**3-1), 16))
       e.add_field(name='Username:', value=usr.name)
-      try:
-        if usr.nick is not None:
-          e.add_field(name='Nickname:', value=usr.nick)
-        else:
-          raise AttributeError
-      except AttributeError:
+      if usr.nick is not None:
+        e.add_field(name='Nickname:', value=usr.nick)
+      else:
         e.add_field(name='Nickname:', value="No nickname set.")
-      try:
-        e.add_field(name='Current Status:', value=str(usr.status).capitalize())
-      except AttributeError:
-        e.add_field(name='Current Status:', value="WTF is up with users in dms.")
+      e.add_field(name='Current Status:', value=str(usr.status).capitalize())
       e.add_field(name='Playing:', value=usr.game)
       e.add_field(name='Joined Server:', value=usr.joined_at.strftime('%m-%d-%Y'))
       e.add_field(name='User Roles:', value=', '.join([i.name.replace('@', '') for i in usr.roles]))

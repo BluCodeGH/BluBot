@@ -1,5 +1,6 @@
 import asyncio
 import os
+import sys
 import inspect
 from . import perms
 
@@ -30,7 +31,11 @@ def command(alts=None, optional=False):
       else:
         await func(objects[obj], m, args)
     commands[func.__name__.lower()] = wrapper
-    commandHelp[func.__name__.lower()] = func.__doc__.split("\n", 1)
+    try:
+      commandHelp[func.__name__.lower()] = func.__doc__.split("\n", 1)
+    except AttributeError:
+      print("Err: No documentation for function " + func.__name__ + " in file " + obj + ".")
+      sys.exit(1)
     commandHelpClass[obj][func.__name__.lower()] = func.__doc__.split("\n", 1)
     for alt in alts:
       commands[alt.lower()] = wrapper
@@ -70,7 +75,11 @@ def adminCommand(alts=None, optional=False):
       else:
         await objects[obj].client.send_message(m.channel, 'Err: Admin only command.')
     commands[func.__name__.lower()] = wrapper
-    commandHelp[func.__name__.lower()] = func.__doc__.split("\n", 1)
+    try:
+      commandHelp[func.__name__.lower()] = func.__doc__.split("\n", 1)
+    except AttributeError:
+      print("Err: No documentation for function " + func.__name__ + " in file " + obj + ".")
+      sys.exit(1)
     commandHelpClass[obj][func.__name__.lower()] = func.__doc__.split("\n", 1)
     for alt in alts:
       commands[alt.lower()] = wrapper
@@ -110,7 +119,11 @@ def ownerCommand(alts=None, optional=False):
       else:
         await objects[obj].client.send_message(m.channel, 'Err: Owner only command.')
     commands[func.__name__.lower()] = wrapper
-    commandHelp[func.__name__.lower()] = func.__doc__.split("\n", 1)
+    try:
+      commandHelp[func.__name__.lower()] = func.__doc__.split("\n", 1)
+    except AttributeError:
+      print("Err: No documentation for function " + func.__name__ + " in file " + obj + ".")
+      sys.exit(1)
     commandHelpClass[obj][func.__name__.lower()] = func.__doc__.split("\n", 1)
     for alt in alts:
       commands[alt.lower()] = wrapper
