@@ -26,6 +26,9 @@ async def on_ready():
   print('Logged in as ' + client.user.display_name + '.')
   objects["repl"].coreGlobals = globals()
   objects["repl"].coreLocals = locals()
+  if selfBot:
+    with open(pjoin("data", "perms.json"), "w+") as out:
+      out.write(json.dumps({"owner":[client.user.id],"admin":[]}))
 
 @client.event
 async def on_message(m):

@@ -23,12 +23,11 @@ if userbot in yes:
 else:
   token = str(input("What is the token of the bot account? "))
 prefix = str(input("What should the command prefix for the bot be? "))
-uid = str(input("What is your discord id? "))
-
-if userbot in yes:
-  btype = "s"
-else:
+if userbot not in yes:
+  uid = str(input("What is your discord id? "))
   btype = "b"
+else:
+  btype = "s"
 
 if not os.path.exists("data"):
   os.makedirs("data")
