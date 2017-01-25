@@ -27,6 +27,7 @@ if userbot not in yes:
   uid = str(input("What is your discord id? "))
   btype = "b"
 else:
+  uid = "replaceMe"
   btype = "s"
 
 if not os.path.exists("data"):
