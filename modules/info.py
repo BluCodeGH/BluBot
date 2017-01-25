@@ -118,14 +118,15 @@ ARGUMENTS:
         continue
       e = discord.Embed(colour=int('0x%06X' % random.randint(0, 256**3-1), 16))
       e.add_field(name='Username:', value=usr.name)
-      if usr.nick is not None:
+      if usr.nick is not None and not m.channel.is_private:
         e.add_field(name='Nickname:', value=usr.nick)
-      else:
+      elif not m.channel.is_private:
         e.add_field(name='Nickname:', value="No nickname set.")
       e.add_field(name='Current Status:', value=str(usr.status).capitalize())
       e.add_field(name='Playing:', value=usr.game)
-      e.add_field(name='Joined Server:', value=usr.joined_at.strftime('%m-%d-%Y'))
-      e.add_field(name='User Roles:', value=', '.join([i.name.replace('@', '') for i in usr.roles]))
+      if not m.channel.is_private:
+        e.add_field(name='Joined Server:', value=usr.joined_at.strftime('%m-%d-%Y'))
+        e.add_field(name='User Roles:', value=', '.join([i.name.replace('@', '') for i in usr.roles]))
       perm = await perms.getPerms(usr.id)
       if perm == []:
         e.add_field(name='Bot Perm(s):', value="User has no bot roles.")

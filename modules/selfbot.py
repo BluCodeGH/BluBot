@@ -4,6 +4,7 @@ import os
 import sys
 from os.path import join as pjoin
 import json
+import pyperclip
 from .internal import commands
 
 class main:
@@ -81,3 +82,47 @@ USAGE:
       await self.client.send_message(m.channel, "Successfully enabled substitutions.")
     else:
       await self.client.send_message(m.channel, "Successfully disabled substitutions.")
+
+  @commands.command()
+  async def acceptInvite(self, m, _):
+    """Accept an invite.
+USAGE:
+  acceptinvite"""
+    async for message in self.client.logs_from(m.channel, limit=10):
+      index = message.content.find("discord.gg/")
+      if index != -1:
+        invite = ""
+        for c in message.content[index+11:]:
+          if c == " ":
+            break
+          else:
+            invite += c
+        inv = await self.client.get_invite(invite)
+        await self.client.accept_invite(invite)
+        await self.client.send_message(m.channel, "Accepted invite to " + inv.server.name + ".")
+        return
+    await self.client.send_message(m.channel, "Could not find an invite URL in the last 10 messages.")
+
+  @commands.command(optional=True)
+  async def getInvite(self, m, args):
+    """Get an invite to the current server.
+USAGE:
+  getinvite"""
+    if args is None:
+      args = "0 0"
+    inp = args.split()
+    if len(inp) == 1:
+      inp.append("0")
+    try:
+      inp[0] = int(inp[0])
+    except ValueError:
+      await self.client.send_message(m.channel, "Err: First argument must be a number.")
+      return
+    try:
+      inp[1] = int(inp[1])
+    except ValueError:
+      await self.client.send_message(m.channel, "Err: Second argument must be a number.")
+      return
+    inv = await self.client.create_invite(m.server, max_age=inp[0] * 60, max_uses=inp[1])
+    pyperclip.copy(inv.url)
+    await self.client.send_message(m.channel, "Copied invite link to clipboard.")
