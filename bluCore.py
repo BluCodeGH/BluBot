@@ -5,7 +5,7 @@ import json
 import sys
 import traceback
 import datetime
-import discord
+from discord import Client
 import modules
 from modules.internal import commands
 
@@ -13,7 +13,7 @@ with open(pjoin("data","botData.json"),"r") as infile:
   data = json.loads(infile.read())
 selfBot = data[-2] == "s"
 
-client = discord.Client()
+client = Client()
 print("Loading modules.")
 objects = modules.init(client, selfBot)
 system = objects["system"]
@@ -29,6 +29,9 @@ async def on_ready():
   if selfBot:
     with open(pjoin("data", "perms.json"), "w+") as out:
       out.write(json.dumps({"owner":[client.user.id],"admin":[]}))
+    print("Voice disabled due to running in selfbot mode.")
+  if restartMsg is not None:
+    await client.send_message(restartMsg.channel, "Restarted successfully.")
 
 @client.event
 async def on_message(m):
@@ -64,7 +67,11 @@ async def on_message(m):
     await objects["selfbot"].substitute(m, None)
   await objects["management"].filter(m, None)
 
-def run():
+restartMsg = None
+
+def run(msg):
+  global restartMsg
+  restartMsg = msg
   loop = asyncio.get_event_loop()
   try:
     try:

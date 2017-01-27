@@ -11,6 +11,9 @@ def init(client, selfBot):
   if selfBot:
     __all__.append("selfbot")
     modules["selfbot"] = importlib.import_module("modules.selfbot")
+  else:
+    __all__.append("voice")
+    modules["voice"] = importlib.import_module("modules.voice")
   objects = {}
   for m in __all__:
     modules[m] = importlib.reload(modules[m])

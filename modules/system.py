@@ -12,7 +12,7 @@ class main:
     with open(os.path.join("data","botData.json"),"r") as infile:
       data = json.loads(infile.read())
       self.startChars = data[-1]
-    self.isRestart = False
+    self.isRestart = None
     self.latencyMsg = None
     self.latencyTime = None
 
@@ -36,7 +36,7 @@ USAGE:
     """Quit the bot
 USAGE:
   quit"""
-    self.isRestart = True
+    self.isRestart = m
     await self.client.send_message(m.channel, "Restarting.")
     await self.client.logout()
 

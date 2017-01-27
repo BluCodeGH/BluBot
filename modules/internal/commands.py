@@ -68,7 +68,7 @@ def adminCommand(alts=None, optional=False):
         args = args2
       if await perms.check(m.author.id, ["owner", "admin"]) or selfCalled:
         if inspect.getsourcelines(func)[0][1][-4] != "_" and args is None and not optional:
-          res = 'Err: Missing required argument. Usage:\n```' + func.__doc__.split("\n", 2)[-1] +  + "```"
+          res = 'Err: Missing required argument. Usage:\n```' + func.__doc__.split("\n", 2)[-1] + "```"
           await objects[obj].client.send_message(m.channel, res)
         else:
           await func(objects[obj], m, args)

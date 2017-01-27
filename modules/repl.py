@@ -58,6 +58,7 @@ class Shell(code.InteractiveConsole):
     res = str(inp.content)
     if res.lstrip(self.prefix).lower() in ["quit()", "quit", "exit()", "exit"]:
       raise EOFError
-    await self.client.edit_message(inp, prompt.content + " " + res.strip(self.prefix))
-    await self.client.delete_message(prompt)
+    if inp.author.id == self.client.user.id:
+      await self.client.edit_message(inp, prompt.content + " " + res.strip(self.prefix))
+      await self.client.delete_message(prompt)
     return res.strip("`\n")

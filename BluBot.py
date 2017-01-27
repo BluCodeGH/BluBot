@@ -3,6 +3,7 @@ import os
 import time
 import asyncio
 import importlib
+import discord #we cant unload discord or nacl will give an error when we try to re-load it
 
 if os.name == 'posix': #use uvloop if possible
   try:
@@ -17,11 +18,12 @@ initial = sys.modules.copy().keys() #get initial list of modules not to remove
 
 import bluCore
 
+restartMsg = None
 while True:
   print("Running bot.")
-  isRestart = bluCore.run() #run the bot
-  print("Bot finished with restart status " + str(isRestart) + ".")
-  if isRestart:
+  restartMsg = bluCore.run(restartMsg) #run the bot
+  print("Bot finished with restart status " + str(restartMsg is not None) + ".")
+  if restartMsg is not None:
     loop_old = asyncio.get_event_loop() #discard the old event loop
     loop_old.close()
 

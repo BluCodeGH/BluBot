@@ -3,7 +3,7 @@ import random
 from os.path import join as pjoin
 from yahoo_finance import Share, Currency
 from google import search
-import discord
+from discord import Embed
 from .internal import commands
 from .internal import util
 from .internal import perms
@@ -116,7 +116,7 @@ ARGUMENTS:
       if isinstance(usr, str):
         await self.client.send_message(m.channel, "Invalid username " + usr + ".")
         continue
-      e = discord.Embed(colour=int('0x%06X' % random.randint(0, 256**3-1), 16))
+      e = Embed(colour=int('0x%06X' % random.randint(0, 256**3-1), 16))
       e.add_field(name='Username:', value=usr.name)
       if usr.nick is not None and not m.channel.is_private:
         e.add_field(name='Nickname:', value=usr.nick)
@@ -149,7 +149,7 @@ USAGE:
 ARGUMENTS:
   command:  The name of a command to get more detailed info on."""
     if args is None:
-      e = discord.Embed(title="General Help", colour=int('0x%06X' % random.randint(0, 256**3-1), 16))
+      e = Embed(title="General Help", colour=int('0x%06X' % random.randint(0, 256**3-1), 16))
       for cName, cmds in commands.commandHelpClass.items():
         res = ""
         for cmd, hlp in cmds.items():
@@ -173,7 +173,7 @@ ARGUMENTS:
         else:
           await self.client.send_message(m.channel, "Err: Unknown command "  + name + ".")
           return
-        e = discord.Embed(colour=int('0x%06X' % random.randint(0, 256**3-1), 16))
+        e = Embed(colour=int('0x%06X' % random.randint(0, 256**3-1), 16))
         e.add_field(name=comm, value=hlp)
         e.set_author(name=m.author.display_name, icon_url=m.author.avatar_url)
         if self.client.user == m.author:
