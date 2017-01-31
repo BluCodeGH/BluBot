@@ -27,8 +27,11 @@ async def on_ready():
   objects["repl"].coreGlobals = globals()
   objects["repl"].coreLocals = locals()
   if selfBot:
-    with open(pjoin("data", "perms.json"), "w+") as out:
-      out.write(json.dumps({"owner":[client.user.id],"admin":[]}))
+    with open(pjoin("data", "perms.json"), "r") as inf:
+      pdata = json.loads(inf.read())
+    if pdata["owner"] == ["replaceMe"]:
+      with open(pjoin("data", "perms.json"), "w+") as out:
+        out.write(json.dumps({"owner":[client.user.id],"admin":pdata["admin"]}))
     print("Voice disabled due to running in selfbot mode.")
   if restartMsg is not None:
     await client.send_message(restartMsg.channel, "Restarted successfully.")
@@ -76,7 +79,7 @@ def run(msg):
   try:
     try:
       print("Logging in.")
-      loop.run_until_complete(client.start(*data[:-2]))
+      loop.run_until_complete(client.start(*data[:-2], bot=not selfBot))
     except RuntimeError:
       pass
   except KeyboardInterrupt:

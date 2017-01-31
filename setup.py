@@ -14,7 +14,7 @@ while userbot not in valid:
   userbot = str(input("Will you use your account for this bot? [Y,N] "))
 if userbot in yes:
   while twofa not in valid:
-    twofa = str(input("Do you use two factor authentication? [Y/N] "))
+    twofa = str(input("Will you use your token to log in? (token only if you use 2fa) [Y/N] "))
   if twofa in yes:
     token = str(input("What is your user token? "))
   else:
