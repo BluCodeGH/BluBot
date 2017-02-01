@@ -50,7 +50,6 @@ USAGE:
     if out.returncode != 0:
       await self.client.send_message(m.channel, "Err: Update Error")
       if out.stdout != "":
-        print(out.stdout, type(out.stdout))
         await self.client.send_message(m.channel, "```" + out.stdout + "```")
       else:
         await self.client.send_message(m.channel, "```No output```")

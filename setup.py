@@ -1,5 +1,7 @@
 from os.path import join as pjoin
 import os
+import sys
+import subprocess
 
 yes = ["y", "Y"]
 valid = yes + ["n", "N"]
@@ -23,12 +25,12 @@ if userbot in yes:
 else:
   token = str(input("What is the token of the bot account? "))
 prefix = str(input("What should the command prefix for the bot be? "))
-if userbot not in yes:
-  uid = str(input("What is your discord id? "))
-  btype = "b"
-else:
+if userbot in yes:
   uid = "replaceMe"
   btype = "s"
+else:
+  uid = str(input("What is your discord id? "))
+  btype = "b"
 
 if not os.path.exists("data"):
   os.makedirs("data")
@@ -47,5 +49,23 @@ with open(pjoin("data", "replace.json"), "w+") as out:
   out.write('[{}, true]')
 with open(pjoin("data", "filters.json"), "w+") as out:
   out.write('[{}, true]')
+
+print("Data files setup, now installing modules (this may take a while).")
+
+if userbot in yes:
+  out = subprocess.run([sys.executable, "-m", "pip", "install", "-U", "-r", "selfbot_requirements.txt"], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, universal_newlines=True, shell=True)
+else:
+  out = subprocess.run([sys.executable, "-m", "pip", "install", "-U", "-r", "bot_requirements.txt"], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, universal_newlines=True, shell=True)
+if out.returncode != 0:
+  print("Error in automatic general pip, please manually install requirements.txt.")
+  print("Automatic general pip output:")
+  print(out.stdout)
+
+if os.name == 'posix':
+  out = subprocess.run([sys.executable, "-m", "pip", "install", "uvloop"], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, universal_newlines=True, shell=True)
+  if out.returncode != 0:
+    print("Error in automatic uvloop pip, please manually install uvloop if possible (not necessary).")
+    print("Automatic uvloop pip output:")
+    print(out.stdout)
 
 print("Setup finished successfully.")

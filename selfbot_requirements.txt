@@ -1,0 +1,5 @@
+discord.py
+google
+yahoo-finance
+pyscreenshot
+Pillow
