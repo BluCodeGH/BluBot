@@ -64,7 +64,7 @@ ARGUMENTS:
         func = func.content
         env = {}
         if func.startswith("```python\ndef "):
-          func = func[10:]
+          func = func[10:-3]
         exec(func, env)
         self.substitutions[args[0]].append(env[list(env.keys())[1]])
       with open(pjoin("data", "replace.pkl"), "w+b") as out:
