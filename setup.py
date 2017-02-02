@@ -1,6 +1,7 @@
 from os.path import join as pjoin
 import os
 import sys
+import pickle
 import subprocess
 
 yes = ["y", "Y"]
@@ -45,8 +46,8 @@ with open(pjoin("data", "perms.json"), "w+") as out:
   out.write('{"owner":["' + uid + '"], "admin":[]}')
 with open(pjoin("data", "quotes.json"), "w+") as out:
   out.write('[]')
-with open(pjoin("data", "replace.json"), "w+") as out:
-  out.write('[{}, true]')
+with open(pjoin("data", "replace.pkl"), "w+") as out:
+  out.write(pickle.dumps([{}, True]))
 with open(pjoin("data", "filters.json"), "w+") as out:
   out.write('[{}, true]')
 
