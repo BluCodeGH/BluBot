@@ -1,8 +1,7 @@
 from os.path import join as pjoin
 import os
-import sys
 import pickle
-import subprocess
+import pip
 
 yes = ["y", "Y"]
 valid = yes + ["n", "N"]
@@ -46,27 +45,19 @@ with open(pjoin("data", "perms.json"), "w+") as out:
   out.write('{"owner":["' + uid + '"], "admin":[]}')
 with open(pjoin("data", "quotes.json"), "w+") as out:
   out.write('[]')
-with open(pjoin("data", "replace.pkl"), "w+") as out:
+with open(pjoin("data", "replace.pkl"), "w+b") as out:
   out.write(pickle.dumps([{}, True]))
 with open(pjoin("data", "filters.json"), "w+") as out:
   out.write('[{}, true]')
 
-print("Data files setup, now installing modules (this may take a while).")
+print("Data files setup, now installing modules.")
 
 if userbot in yes:
-  out = subprocess.run([sys.executable, "-m", "pip", "install", "-U", "-r", "selfbot_requirements.txt"], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, universal_newlines=True, shell=True)
+  pip.main(["install", "-U", "-r", "selfbot_requirements.txt"])
 else:
-  out = subprocess.run([sys.executable, "-m", "pip", "install", "-U", "-r", "bot_requirements.txt"], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, universal_newlines=True, shell=True)
-if out.returncode != 0:
-  print("Error in automatic general pip, please manually install requirements.txt.")
-  print("Automatic general pip output:")
-  print(out.stdout)
+  pip.main(["install", "-U", "-r", "bot_requirements.txt"])
 
 if os.name == 'posix':
-  out = subprocess.run([sys.executable, "-m", "pip", "install", "uvloop"], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, universal_newlines=True, shell=True)
-  if out.returncode != 0:
-    print("Error in automatic uvloop pip, please manually install uvloop if possible (not necessary).")
-    print("Automatic uvloop pip output:")
-    print(out.stdout)
+  pip.main(["install", "uvloop"])
 
 print("Setup finished successfully.")
