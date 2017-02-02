@@ -11,7 +11,7 @@ from .internal import commands
 class main:
   def __init__(self, client):
     self.client = client
-    with open(pjoin("data", "replace.pkl"),"r") as infile:
+    with open(pjoin("data", "replace.pkl"),"rb") as infile:
       self.substitutions, self.subsOn = pickle.loads(infile.read())
 
   @commands.command()
@@ -64,7 +64,7 @@ ARGUMENTS:
         env = {}
         exec(funcm.content, env)
         self.substitutions[args[0]].append(env[list(env.keys())[1]])
-      with open(pjoin("data", "replace.pkl"), "w+") as out:
+      with open(pjoin("data", "replace.pkl"), "w+b") as out:
         out.write(pickle.dumps((self.substitutions, self.subsOn)))
       await self.client.send_message(m.channel, "Successfully added replacement.")
 
@@ -81,7 +81,7 @@ ARGUMENTS:
       await self.client.send_message(m.channel, "Err: Wrong number of arguments. Must be 1.")
     else:
       if self.substitutions.pop(args[0], None) is not None:
-        with open(pjoin("data", "replace.pkl"), "w+") as out:
+        with open(pjoin("data", "replace.pkl"), "w+b") as out:
           out.write(pickle.dumps((self.substitutions, self.subsOn)))
         await self.client.send_message(m.channel, "Successfully removed replacement.")
       else:
@@ -93,7 +93,7 @@ ARGUMENTS:
 USAGE:
   togglesubstitutions"""
     self.subsOn = not self.subsOn
-    with open(pjoin("data", "replace.pkl"), "w+") as out:
+    with open(pjoin("data", "replace.pkl"), "w+b") as out:
       out.write(pickle.dumps((self.substitutions, self.subsOn)))
     if self.subsOn:
       await self.client.send_message(m.channel, "Successfully enabled substitutions.")
