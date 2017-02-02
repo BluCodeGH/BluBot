@@ -60,11 +60,12 @@ ARGUMENTS:
         await self.client.send_message(m.channel, "Please enter the replacement function.")
         def check(m):
           return m.content.startswith("```python\ndef ") or m.content.startswith("def ")
-        func = await self.client.wait_for_message(author=m.author, channel=m.channel, check=check).content
+        func = await self.client.wait_for_message(author=m.author, channel=m.channel, check=check)
+        func = func.content
         env = {}
         if func.startswith("```python\ndef "):
           func = func[10:]
-        exec(funcm.content, env)
+        exec(func, env)
         self.substitutions[args[0]].append(env[list(env.keys())[1]])
       with open(pjoin("data", "replace.pkl"), "w+b") as out:
         out.write(pickle.dumps((self.substitutions, self.subsOn)))
