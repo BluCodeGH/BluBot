@@ -83,9 +83,10 @@ ARGUMENTS:
             else:
               data = '__all__ = ["' + name + '"]'
             f.write(data)
-          importlib.invalidate_caches()
-          importlib.import_module(name, "data.replaceFuncs")
           self.substitutions[name] = args[1]
+          importlib.invalidate_caches()
+          print(name)
+          importlib.import_module(name, "data.replaceFuncs")
         else:
           await self.client.send_message(m.channel, "Err: A function with that name already exists. Please use a different name.")
       with open(pjoin("data", "replace.json"), "w+") as out:
