@@ -15,7 +15,7 @@ class Bot(Client):
     content = str(content) if content is not None else None
     if len(self.sent) >= self.sent_log:
       self.sent.pop()
-    self.sent = [content.strip("\n")] + self.sent
+    self.sent.insert(0, content.strip("\n"))
     if embed is not None:
       embed = embed.to_dict()
     data = await self.http.send_message(channel_id, content, guild_id=guild_id, tts=tts, embed=embed)
