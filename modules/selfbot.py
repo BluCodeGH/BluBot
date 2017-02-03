@@ -78,7 +78,7 @@ ARGUMENTS:
           with open(pjoin("data", "replaceFuncs", "__init__.py"), "r+") as f:
             data = f.read()
             f.seek(0)
-            if data != "__all__ = []":
+            if data.strip("\n") != "__all__ = []":
               data = data[:-1] + ', "' + name + '"]'
             else:
               data = '__all__ = ["' + name + '"]'
