@@ -1,6 +1,7 @@
 /.idea
 /__pycache__
 /.DS_Store
+/data/replaceFuncs
 *.sublime-workspace
 *.sublime-project
 *.json

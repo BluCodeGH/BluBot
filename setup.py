@@ -1,6 +1,5 @@
 from os.path import join as pjoin
 import os
-import pickle
 import pip
 
 yes = ["y", "Y"]
@@ -35,6 +34,9 @@ else:
 if not os.path.exists("data"):
   os.makedirs("data")
 
+if not os.path.exists(pjoin("data", "replaceFuncs")):
+  os.makedirs(pjoin("data", "replaceFuncs"))
+
 if token is None:
   with open(pjoin("data", "botData.json"), "w+") as out:
     out.write('["' + email + '", "' + pwrd + '", "s", "' + prefix + '"]')
@@ -46,9 +48,11 @@ with open(pjoin("data", "perms.json"), "w+") as out:
 with open(pjoin("data", "quotes.json"), "w+") as out:
   out.write('[]')
 with open(pjoin("data", "replace.pkl"), "w+b") as out:
-  out.write(pickle.dumps([{}, True]))
+  out.write('[{}, true]')
 with open(pjoin("data", "filters.json"), "w+") as out:
   out.write('[{}, true]')
+with open(pjoin("data", "replaceFuncs", "__init__.py"), "w+") as out:
+  out.write('__all__ = []')
 
 print("Data files setup, now installing modules.")
 

@@ -9,10 +9,6 @@ class main:
   """General bot maintenance."""
   def __init__(self, client):
     self.client = client
-    with open(os.path.join("data","botData.json"),"r") as infile:
-      data = json.loads(infile.read())
-      self.startChars = data[-1]
-    self.isRestart = None
     self.latencyMsg = None
     self.latencyTime = None
 
@@ -36,7 +32,7 @@ USAGE:
     """Quit the bot
 USAGE:
   quit"""
-    self.isRestart = m
+    self.client.isRestart = m
     await self.client.send_message(m.channel, "Restarting.")
     await self.client.logout()
 
@@ -97,10 +93,10 @@ ARGUMENTS:
   chars:  The character(s) to set the prefix to."""
     with open(os.path.join("data", "botData.json"),"r") as inf:
       botData = json.loads(inf.read())
-    self.startChars = args.split()[0]
+    self.client.prefix = args.split()[0]
     with open(os.path.join("data", "botData.json"), "w+") as out:
-      out.write(json.dumps([botData[0], self.startChars]))
-    await self.client.send_message(m.channel, "The command prefix has been updated to `" + self.startChars + "`")
+      out.write(json.dumps(botData[:-1] + [self.client.prefix]))
+    await self.client.send_message(m.channel, "The command prefix has been updated to `" + self.client.prefix + "`")
 
   @commands.adminCommand(optional=True)
   async def latency(self, m, args):
@@ -119,19 +115,12 @@ USAGE:
         await self.client.edit_message(self.latencyMsg, "The current latency is `" + str(diff.total_seconds() * 1000) + "`ms.")
         self.latencyTime = None
 
+  @commands.adminCommand()
   async def say(self, m, msg):
-    await self.client.send_message(m.channel, msg)
-
-  @commands.ownerCommand("run")
-  async def exec(self, m, args):
-    """Runs python code.
+    """Say something
 USAGE:
-  exec code
+  say message
 
 ARGUMENTS:
-  code:  Python code to run."""
-    try:
-      exec(args)
-    except Exception as e:
-      res = "```" + str(type(e).__name__) + ": " + str(e).capitalize() + ".```"
-      await self.client.send_message(m.channel, res)
+  message:  The message to say."""
+    await self.client.send_message(m.channel, msg)

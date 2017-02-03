@@ -5,15 +5,15 @@ import json
 import sys
 import traceback
 import datetime
-from discord import Client
 import modules
+from modules.internal.bot import Bot
 from modules.internal import commands
 
 with open(pjoin("data","botData.json"),"r") as infile:
   data = json.loads(infile.read())
 selfBot = data[-2] == "s"
 
-client = Client()
+client = Bot(data[-1])
 print("Loading modules.")
 objects = modules.init(client, selfBot)
 system = objects["system"]
@@ -38,7 +38,9 @@ async def on_ready():
 
 @client.event
 async def on_message(m):
-  if m.content.startswith(system.startChars) and not m.author.bot and m.content.strip(system.startChars) != "":
+  if client.was_sent(m):
+    return
+  if m.content.startswith(client.prefix) and not m.author.bot and m.content.strip(client.prefix) != "":
     if selfBot and m.author.id != client.user.id:
       return
     if cooldown.get(m.author.id, None) is not None:
@@ -46,9 +48,9 @@ async def on_message(m):
         return
     cooldown[m.author.id] = datetime.datetime.now()
     if ' ' in m.content:
-      comm, args = m.content[len(system.startChars):].split(" ", 1)
+      comm, args = m.content[len(client.prefix):].split(" ", 1)
     else:
-      comm = m.content[len(system.startChars):]
+      comm = m.content[len(client.prefix):]
       args = None
     if comm.lower() in commands.commands.keys():
       try:
@@ -66,7 +68,7 @@ async def on_message(m):
           args = ""
   elif m.content == "The current latency is" and m.author == client.user:
     await commands.commands["latency"](m, "placeholder")
-  if selfBot:
+  elif selfBot:
     await objects["selfbot"].substitute(m, None)
   await objects["management"].filter(m, None)
 
@@ -85,4 +87,4 @@ def run(msg):
   except KeyboardInterrupt:
     loop.run_until_complete(client.logout())
     print("Logged out.")
-  return system.isRestart
+  return client.isRestart
