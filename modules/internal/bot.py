@@ -15,13 +15,17 @@ class Bot(Client):
     content = str(content) if content is not None else None
     if len(self.sent) >= self.sent_log:
       self.sent.pop()
-    self.sent.insert(0, content.strip("\n"))
+    if content is not None:
+      self.sent.insert(0, content.strip("\n"))
     if embed is not None:
       embed = embed.to_dict()
     data = await self.http.send_message(channel_id, content, guild_id=guild_id, tts=tts, embed=embed)
     channel = self.get_channel(data.get('channel_id'))
     message = self.connection._create_message(channel=channel, **data)
-    self.sent[self.sent.index(content.strip("\n"))] = message
+    if content is not None:
+      self.sent[self.sent.index(content.strip("\n"))] = message
+    else:
+      self.sent.append(message)
     return message
 
   def was_sent(self, m):
