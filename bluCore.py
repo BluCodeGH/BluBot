@@ -8,6 +8,7 @@ import datetime
 import modules
 from modules.internal.bot import Bot
 from modules.internal import commands
+from modules.internal import perms
 
 with open(pjoin("data","botData.json"),"r") as infile:
   data = json.loads(infile.read())
@@ -43,7 +44,7 @@ async def on_message(m):
   if m.content.startswith(client.prefix) and not m.author.bot and m.content.strip(client.prefix) != "":
     if selfBot and m.author.id != client.user.id:
       return
-    if cooldown.get(m.author.id, None) is not None:
+    if cooldown.get(m.author.id, None) is not None and not await perms.check(m.author.id, "owner"):
       if (datetime.datetime.now() - cooldown[m.author.id]).total_seconds() < 3:
         return
     cooldown[m.author.id] = datetime.datetime.now()
