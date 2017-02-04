@@ -177,7 +177,6 @@ ARGUMENTS:
         e.add_field(name=comm, value=hlp)
         e.set_author(name=m.author.display_name, icon_url=m.author.avatar_url)
         if self.client.user == m.author:
-          await self.client.send_message(m.channel, "Unable to dm help, as this is a user bot.")
           await self.client.send_message(m.channel, embed=e)
         else:
           await self.client.send_message(m.channel, "I have dm'd you my help.")

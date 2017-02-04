@@ -55,6 +55,7 @@ async def on_message(m):
     if comm.lower() in commands.commands.keys():
       try:
         await commands.commands[comm.lower()](m, args)
+        return
       except Exception as e:
         res = "An internal error occurred. Contact <@!207648732336881664> for help.\n```python\n"
         exc_type, exc_value, exc_traceback = sys.exc_info()
@@ -66,9 +67,9 @@ async def on_message(m):
         await client.send_message(m.channel, res)
         if args is None:
           args = ""
-  elif m.content == "The current latency is" and m.author == client.user:
+  if m.content == "The current latency is" and m.author == client.user:
     await commands.commands["latency"](m, "placeholder")
-  elif selfBot:
+  if selfBot:
     await objects["selfbot"].substitute(m, None)
   await objects["management"].filter(m, None)
 
