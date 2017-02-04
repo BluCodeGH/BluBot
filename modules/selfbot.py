@@ -85,7 +85,7 @@ ARGUMENTS:
             f.write(data)
           self.substitutions[name] = args[1]
           importlib.invalidate_caches()
-          print(name)
+          asyncio.sleep(1) #maybe we need to wait for invalidate_caches?
           importlib.import_module(name, "data.replaceFuncs")
         else:
           await self.client.send_message(m.channel, "Err: A function with that name already exists. Please use a different name.")
