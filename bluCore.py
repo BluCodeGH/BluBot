@@ -16,7 +16,7 @@ selfBot = data[-2] == "s"
 
 client = Bot(data[-1])
 print("Loading modules.")
-objects = modules.init(client, selfBot)
+objects, on_messages = modules.init(client, selfBot)
 system = objects["system"]
 print("Modules loaded.")
 
@@ -68,11 +68,8 @@ async def on_message(m):
         await client.send_message(m.channel, res)
         if args is None:
           args = ""
-  if m.content == "The current latency is" and m.author == client.user:
-    await commands.commands["latency"](m, "placeholder")
-  if selfBot:
-    await objects["selfbot"].substitute(m, None)
-  await objects["management"].filter(m, None)
+  for func in on_messages:
+    await func(m)
 
 restartMsg = None
 

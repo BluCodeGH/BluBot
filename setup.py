@@ -34,6 +34,9 @@ else:
 if not os.path.exists("data"):
   os.makedirs("data")
 
+if not os.path.exists("logs"):
+  os.makedirs("logs")
+
 if not os.path.exists(pjoin("data", "replaceFuncs")):
   os.makedirs(pjoin("data", "replaceFuncs"))
 
@@ -51,6 +54,8 @@ with open(pjoin("data", "replace.pkl"), "w+") as out:
   out.write('[{}, true]')
 with open(pjoin("data", "filters.json"), "w+") as out:
   out.write('[{}, true]')
+with open(pjoin("data", "keywords.json"), "w+") as out:
+  out.write('[]')
 with open(pjoin("data", "replaceFuncs", "__init__.py"), "w+") as out:
   out.write('__all__ = []')
 

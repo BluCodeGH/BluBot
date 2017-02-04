@@ -10,7 +10,7 @@ class main:
     with open(pjoin("data", "filters.json"),"r") as infile:
       self.filters, self.filtersOn = json.loads(infile.read())
 
-  async def filter(self, m, _):
+  async def filter(self, m):
     if self.filters.get(m.channel.id, None) is None:
       self.filters[m.channel.id] = []
       with open(pjoin("data", "filters.json"), "w+") as out:
@@ -28,6 +28,9 @@ class main:
           await self.client.delete_message(m)
           await self.client.send_message(m.channel, m.author.mention + " Your message has been removed due to the filtering rules the owner of this bot has set in place.")
           return
+
+  async def on_message(self, m):
+    await self.filter(m)
 
   @commands.adminCommand("addFilter")
   async def newFilter(self, m, args):

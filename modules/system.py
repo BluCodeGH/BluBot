@@ -115,6 +115,10 @@ USAGE:
         await self.client.edit_message(self.latencyMsg, "The current latency is `" + str(diff.total_seconds() * 1000) + "`ms.")
         self.latencyTime = None
 
+  async def on_message(self, m):
+    if m.content == "The current latency is" and m.author == self.client.user:
+      await self.latency(m, "placeholder")
+
   @commands.adminCommand()
   async def say(self, m, msg):
     """Say something

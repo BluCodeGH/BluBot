@@ -28,7 +28,7 @@ USAGE:
     except FileNotFoundError:
       await self.client.send_message(m.channel, "Err: Unable to get screenshot. This bot is probably running on a non-GUI system.")
 
-  async def substitute(self, m, _):
+  async def substitute(self, m):
     if m.author.id != self.client.user.id or not self.subsOn:
       return
     res = m.content
@@ -41,6 +41,9 @@ USAGE:
     if res != m.content:
       await self.client.edit_message(m, res)
       m.content = res
+
+  async def on_message(self, m):
+    await self.substitute(m)
 
   @commands.ownerCommand(["newSub", "addSubstitution", "addSub"])
   async def newSubstitution(self, m, args):
