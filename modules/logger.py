@@ -24,7 +24,7 @@ class main:
   async def _log(self):
     out = ""
     for msg in self.logs:
-      out += msg.timestamp.strftime("%Y/%m/%d %I:%M:%S %p") + ":" + msg.author.name + ": " + msg.content + "\n"
+      out += msg.timestamp.strftime("%Y/%m/%d %I:%M:%S %p") + ": " + msg.author.name + ": " + msg.content + "\n"
     self.logs = []
     with open(pjoin("logs", str(datetime.date.today()) + ".log"), "a+b") as outfile:
       outfile.write(out.encode("utf-8"))
