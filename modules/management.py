@@ -86,7 +86,7 @@ ARGUMENTS:
 
   @commands.adminCommand()
   async def toggleFilter(self, m, _):
-    """Toggle the filter
+    """Toggle the filter.
 USAGE:
   togglefilter"""
     if self.filters.get(m.channel.id, None) is None:
@@ -107,6 +107,27 @@ USAGE:
         await self.client.send_message(m.channel, "Successfully disabled filters.")
     else:
       await self.client.send_message(m.channel, "Insufficient permissions to toggle filters on this channel. You need **manage messages** or **administrator**.")
+
+  @commands.command("getFilters")
+  async def listFilters(self, m, args):
+    """DM all the filters for the current channel.
+USAGE:
+  listfilters"""
+    if self.filters.get(m.channel.id, None) is None:
+      self.filters[m.channel.id] = []
+      with open(pjoin("data", "filters.json"), "w+") as out:
+        out.write(json.dumps((self.filters, self.filtersOn)))
+    if self.filters.get(m.channel.id) == []:
+      res = "There are no filters for channel " + m.channel.name + "."
+    else:
+      res = "Filters for channel " + m.channel.name + ":\n"
+      for f in self.filters.get(m.channel.id):
+        res += "`" + f + "`\n"
+    if m.author != self.client.user:
+      await self.client.send_message(m.author, res)
+      await self.client.send_message(m.channel, m.author.mention + " Please check your DMs.")
+    else:
+      await self.client.send_message(m.channel, "Err: Unable to DM filters.")
 
   @commands.adminCommand()
   async def kick(self, m, args):
