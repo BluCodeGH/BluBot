@@ -55,7 +55,7 @@ USAGE:
         await self.client.send_message(m.channel, "Up to date, not restarting.")
       else:
         await self.client.send_message(m.channel, "Git output:\n```" + out.stdout.split("\n", 3)[-1] + "```")
-        await self.client.send_message(m.channel, "Update successful, now restarting")
+        await self.client.send_message(m.channel, "Update successful, now restarting.")
         await self.restart(m, None)
 
   @commands.adminCommand("push")

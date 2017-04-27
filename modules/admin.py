@@ -24,7 +24,8 @@ ARGUMENTS:
       success = True
       for person in args.split():
         if await util.getUser(person, self.client) is not None:
-          msg = await perms.allow(await util.getUser(person, self.client).id, "admin")
+          person = await util.getUser(person, self.client)
+          msg = await perms.allow(person.id, "admin")
           if isinstance(msg, str):
             await self.client.send_message(m.channel, msg)
             success = False
@@ -37,7 +38,8 @@ ARGUMENTS:
       await self.client.send_message(m.channel, 'Who should I add as an admin?')
       reply = await self.client.wait_for_message(author=m.author)
       if await util.getUser(reply.content, self.client) is not None:
-        msg = await perms.allow(await util.getUser(reply.content, self.client).id, "admin")
+        person = await util.getUser(reply.content, self.client)
+        msg = await perms.allow(person.id, "admin")
         if isinstance(msg, str):
           await self.client.send_message(m.channel, msg)
         else:
@@ -59,7 +61,7 @@ ARGUMENTS:
   mention:  A mention of a user. Will ask interactively if not specified."""
     if args != None:
       for person in args.split():
-        if await perms.check(m.server.get_member_named(person).id, "admin", self.client):
+        if await perms.check(m.server.get_member_named(person).id, "admin"):
           msg = await perms.deny(m.server.get_member_named(person).id, "admin")
           if isinstance(msg, str):
             await self.client.send_message(m.channel, msg)
