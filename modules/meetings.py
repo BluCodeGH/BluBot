@@ -5,6 +5,7 @@ from datetime import datetime
 from dateutil import tz as dtz
 from .internal import commands
 from .internal import util
+from .internal import perms
 
 class main:
   """General bot maintenance."""
@@ -82,8 +83,10 @@ ARGUMENTS:
       except ValueError:
         await self.client.send_message(m.channel, "Err: Has DST value must be `True` or `False`.")
     person = m.author
-    if len(args) == 3:
+    if len(args) == 3 and await perms.check(m.author.id, "admin"):
       person = await util.getUser(args[2], self.client)
+    elif len(args) == 3:
+      await self.client.send_message(m.channel, "Err: You must be an admin to set another's time zone.")
     self.data[person.id] = (int(args[0][3:]), dst)
     with open(pjoin("data", "meetingData.json"), "w") as outfile:
       outfile.write(json.dumps(self.data))
