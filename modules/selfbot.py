@@ -45,7 +45,7 @@ USAGE:
   async def doScramble(self, m):
     ws = re.split(r"(\W+)", m.content) + [""]
     res = ""
-    for i in range(len(ws) / 2):
+    for i in range(len(ws) // 2):
       w = ws[2 * i]
       if len(w) > 3 and not (w[0] == ":" and w[-1] == ":"):
         s, *c, e = list(w)
