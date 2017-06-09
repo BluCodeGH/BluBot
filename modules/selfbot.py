@@ -49,7 +49,7 @@ USAGE:
       if len(w) > 3 and not (w[0] == ":" and w[-1] == ":"):
         s, *c, e = list(w)
         random.shuffle(c)
-        res += s + str(c) + e + " "
+        res += s + "".join(c) + e + " "
     res = res[:-1]
     if res != m.content:
       m.content = res
