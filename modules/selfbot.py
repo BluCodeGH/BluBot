@@ -47,7 +47,7 @@ USAGE:
     res = ""
     for i in range(len(ws) // 2):
       w = ws[2 * i]
-      if len(w) > 3 and not (ws[2 * i - 1][-1] == ":" and ws[2 * i + 1][0] == ":"):
+      if len(w) > 3 and not (len(ws[2 * i - 1]) > 0 and ws[2 * i - 1][-1] == ":" and len(ws[2 * i + 1]) > 0 and ws[2 * i + 1][0] == ":"):
         s, *c, e = list(w)
         random.shuffle(c)
         res += s + "".join(c) + e + ws[2 * i + 1]
