@@ -43,6 +43,8 @@ USAGE:
       m.content = res
 
   async def doScramble(self, m):
+    if m.author.id != self.client.user.id or not self.scramble:
+      return
     ws = re.split(r"(\W+)", m.content) + [""]
     res = ""
     for i in range(len(ws) // 2):
