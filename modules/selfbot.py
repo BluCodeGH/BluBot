@@ -43,14 +43,14 @@ USAGE:
       m.content = res
 
   async def doScramble(self, m):
-    ws = m.content.split(" .,()`'\"<>/?!@#$%^&*[]{}\\|;:~")
+    ws = re.split(r"(\W+)", m.content) + [""]
     res = ""
-    for w in ws:
+    for i in range(len(ws) / 2):
+      w = ws[2 * i]
       if len(w) > 3 and not (w[0] == ":" and w[-1] == ":"):
         s, *c, e = list(w)
         random.shuffle(c)
-        res += s + "".join(c) + e + " "
-    res = res[:-1]
+        res += s + "".join(c) + e + ws[2 * i + 1]
     if res != m.content:
       m.content = res
 
