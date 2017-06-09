@@ -43,7 +43,7 @@ USAGE:
       m.content = res
 
   async def doScramble(self, m):
-    ws = m.content.split()
+    ws = m.content.split(" .,()`'\"<>/?!@#$%^&*[]{}\\|;:~")
     res = ""
     for w in ws:
       if len(w) > 3 and not (w[0] == ":" and w[-1] == ":"):
