@@ -45,7 +45,7 @@ ARGUMENTS:
         break
       count += 1
     await self.client.edit_message(msg, res)
-    await self.client.send_message(m.channel, "Search Finished.")
+    await self.client.send_message(m.channel, "Finished Search.")
 
   @commands.command(["getStock", "stocks", "getStocks"])
   async def stock(self, m, args):
