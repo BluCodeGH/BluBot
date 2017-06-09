@@ -5,6 +5,7 @@ import os
 from os.path import join as pjoin
 import re
 import json
+import random
 import importlib
 import pyperclip
 from .internal import commands
@@ -14,7 +15,7 @@ class main:
   def __init__(self, client):
     self.client = client
     with open(pjoin("data", "replace.json"),"r") as infile:
-      self.substitutions, self.subsOn = json.loads(infile.read())
+      self.substitutions, self.subsOn, self.scramble = json.loads(infile.read())
 
   @commands.command()
   async def screenshot(self, m, _):
@@ -42,8 +43,22 @@ USAGE:
       await self.client.edit_message(m, res)
       m.content = res
 
+  async def scramble(self, m):
+    ws = m.split()
+    res = ""
+    for w in ws:
+      if len(w) > 3 and not (w[0] == ":" and w[-1] == ":"):
+        s, *c, e = list(w)
+        random.shuffle(c)
+        res += s + str(c) + e + " "
+    res = res[:-1]
+    if res != m.content:
+      await self.client.edit_message(m, res)
+      m.content = res
+
   async def on_message(self, m):
     await self.substitute(m)
+    await self.scramble(m)
 
   @commands.ownerCommand(["newSub", "addSubstitution", "addSub"])
   async def newSubstitution(self, m, args):
@@ -92,7 +107,7 @@ ARGUMENTS:
         else:
           await self.client.send_message(m.channel, "Err: A function with that name already exists. Please use a different name.")
       with open(pjoin("data", "replace.json"), "w+") as out:
-        out.write(json.dumps((self.substitutions, self.subsOn)))
+        out.write(json.dumps((self.substitutions, self.subsOn, self.scramble)))
       await self.client.send_message(m.channel, "Successfully added replacement.")
 
   @commands.ownerCommand(["delSub", "remSubstitution", "remSub"])
@@ -118,7 +133,7 @@ ARGUMENTS:
             f.write("__all__ = " + str(l))
         self.substitutions.pop(args[0])
         with open(pjoin("data", "replace.json"), "w+") as out:
-          out.write(json.dumps((self.substitutions, self.subsOn)))
+          out.write(json.dumps((self.substitutions, self.subsOn, self.scramble)))
         await self.client.send_message(m.channel, "Successfully removed replacement.")
       else:
         await self.client.send_message(m.channel, "That replacement does not exist")
@@ -143,11 +158,24 @@ USAGE:
   togglesubstitutions"""
     self.subsOn = not self.subsOn
     with open(pjoin("data", "replace.json"), "w+") as out:
-      out.write(json.dumps((self.substitutions, self.subsOn)))
+      out.write(json.dumps((self.substitutions, self.subsOn, self.scramble)))
     if self.subsOn:
       await self.client.send_message(m.channel, "Successfully enabled substitutions.")
     else:
       await self.client.send_message(m.channel, "Successfully disabled substitutions.")
+
+  @commands.command("toggleScram")
+  async def toggleScramble(self, m, _):
+    """Toggle scramble
+USAGE:
+  togglescramble"""
+    self.scramble = not self.scramble
+    with open(pjoin("data", "replace.json"), "w+") as out:
+      out.write(json.dumps((self.substitutions, self.subsOn, self.scramble)))
+    if self.scramble:
+      await self.client.send_message(m.channel, "Successfully enabled scrambling.")
+    else:
+      await self.client.send_message(m.channel, "Successfully disabled scrambling.")
 
   @commands.command()
   async def acceptInvite(self, m, _):
