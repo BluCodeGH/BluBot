@@ -51,6 +51,8 @@ USAGE:
         s, *c, e = list(w)
         random.shuffle(c)
         res += s + "".join(c) + e + ws[2 * i + 1]
+      else:
+        res += w + ws[2 * i + 1]
     if res != m.content:
       m.content = res
 
