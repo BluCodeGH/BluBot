@@ -40,10 +40,9 @@ USAGE:
         l = re.split("(" + data + ")", res)
         res = eval(name + "." + name + "(res, l)")
     if res != m.content:
-      await self.client.edit_message(m, res)
       m.content = res
 
-  async def scramble(self, m):
+  async def doScramble(self, m):
     ws = m.split()
     res = ""
     for w in ws:
@@ -53,12 +52,14 @@ USAGE:
         res += s + str(c) + e + " "
     res = res[:-1]
     if res != m.content:
-      await self.client.edit_message(m, res)
       m.content = res
 
   async def on_message(self, m):
+    first = str(m.content)
     await self.substitute(m)
-    await self.scramble(m)
+    await self.doScramble(m)
+    if first != m.content:
+      await self.client.edit_message(m, m.content)
 
   @commands.ownerCommand(["newSub", "addSubstitution", "addSub"])
   async def newSubstitution(self, m, args):
